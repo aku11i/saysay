@@ -10,9 +10,10 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(
-    path.join(app.getAppPath(), "dist", "renderer", "index.html")
-  );
+  // mainWindow.loadFile(
+  //   path.join(app.getAppPath(), "dist", "renderer", "index.html")
+  // );
+  mainWindow.loadURL("http://localhost:3000");
 
   mainWindow.webContents.openDevTools();
 }
