@@ -1,14 +1,28 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
+import { preferences } from "../common/preferences";
 
 const createWindow = async () => {
+  const { x, y, width, height } = preferences.store;
+
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    x,
+    y,
+    width: width || 800,
+    height: height || 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
     },
     show: false,
+  });
+
+  mainWindow.on("close", () => {
+    const [x, y] = mainWindow.getPosition();
+    const [width, height] = mainWindow.getSize();
+    preferences.set("x", x);
+    preferences.set("y", y);
+    preferences.set("width", width);
+    preferences.set("height", height);
   });
 
   if (app.isPackaged) {
