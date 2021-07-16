@@ -11,9 +11,9 @@
     "prebuild": "yarn clean",
     "build": "npm-run-all build:*",
     "build:tsc": "tsc --noEmit",
-    "build:esbuild": "esbuild --target=node14 --format=cjs --out-extension:.js=.cjs --outdir=build/main src/main/index.ts src/main/preload.ts",
+    "build:esbuild": "esbuild --bundle --minify --platform=node --target=node14 --external:electron --format=cjs --out-extension:.js=.cjs --outdir=build/main src/main/index.ts src/main/preload.ts",
     "build:vite": "vite build",
-    "predist": "shx rm -rf dist",
+    "predist": "shx rm -rf dist && yarn build",
     "dist": "electron-builder build",
     "clean": "shx rm -rf build",
     "test": "echo \"Error: no test specified\" && exit 1"

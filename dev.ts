@@ -12,17 +12,15 @@ const esbuild = require("esbuild") as typeof import("esbuild");
 
 const workDir = process.cwd();
 
-const watchDirs = [
-  path.join(workDir, "build", "main"),
-  // path.join(workDir, "build", "common"),
-];
+const watchDirs = [path.join(workDir, "build", "main")];
 
 const esbuildOptions: import("esbuild").BuildOptions = {
   entryPoints: ["src/main/index.ts", "src/main/preload.ts"],
   outdir: "build/main",
-  bundle: false,
+  bundle: true,
   platform: "node",
   target: "node14",
+  external: ["electron"],
   format: "cjs",
   watch: true,
   sourcemap: "inline",
