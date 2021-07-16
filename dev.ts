@@ -21,6 +21,7 @@ const esbuildOptions: import("esbuild").BuildOptions = {
   entryPoints: ["src/main/index.ts", "src/main/preload.ts"],
   outdir: "dist/main",
   bundle: false,
+  platform: "node",
   target: "node14",
   format: "cjs",
   watch: true,
