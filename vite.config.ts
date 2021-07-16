@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [reactRefresh()],
   base: "./",
   build: {
-    outDir: "dist/renderer",
+    outDir: "build/renderer",
   },
 });

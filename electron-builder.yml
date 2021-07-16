@@ -1,0 +1,8 @@
+appId: "com.example.saysay"
+mac:
+  identity: null
+asar: true
+files:
+  - build
+  - main.cjs
+  - node_modules

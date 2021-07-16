@@ -1,1 +1,1 @@
-require("./dist/main/index.cjs");
+require("./build/main/index.cjs");

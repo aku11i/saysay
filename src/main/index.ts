@@ -1,33 +1,42 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 
-function createWindow() {
+const createWindow = async () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
     },
+    show: false,
   });
 
-  // mainWindow.loadFile(
-  //   path.join(app.getAppPath(), "dist", "renderer", "index.html")
-  // );
-  mainWindow.loadURL("http://localhost:3000");
-
-  mainWindow.webContents.openDevTools();
-}
+  if (app.isPackaged) {
+    await mainWindow.loadFile(
+      path.join(app.getAppPath(), "build", "renderer", "index.html")
+    );
+    mainWindow.show();
+  } else {
+    await mainWindow.loadURL("http://localhost:3000");
+    mainWindow.webContents.openDevTools();
+    mainWindow.showInactive();
+  }
+};
 
 (async () => {
   await app.whenReady();
 
-  createWindow();
-
-  app.on("activate", function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  app.on("activate", async () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      await createWindow();
+    }
   });
 
-  app.on("window-all-closed", function () {
-    if (process.platform !== "darwin") app.quit();
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
   });
+
+  await createWindow();
 })();
