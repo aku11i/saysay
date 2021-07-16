@@ -18,12 +18,13 @@ const watchDirs = [
 ];
 
 const esbuildOptions: import("esbuild").BuildOptions = {
-  entryPoints: ["src/main/index.ts"],
+  entryPoints: ["src/main/index.ts", "src/main/preload.ts"],
   outdir: "dist/main",
   bundle: false,
   target: "node14",
   format: "cjs",
   watch: true,
+  sourcemap: "inline",
   outExtension: { ".js": ".cjs" },
 };
 

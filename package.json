@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "electron .",
+    "predev": "yarn clean",
     "dev": "node --loader ts-node/esm/transpile-only dev.ts",
     "prebuild": "yarn clean",
     "build": "npm-run-all build:*",
-    "build:esbuild": "esbuild --target=node14 --format=cjs --out-extension:.js=.cjs --outdir=dist/main src/main/index.ts",
+    "build:esbuild": "esbuild --target=node14 --format=cjs --out-extension:.js=.cjs --outdir=dist/main src/main/index.ts src/main/preload.ts",
     "build:vite": "vite build",
     "build:tsc": "tsc --noEmit",
     "clean": "shx rm -rf dist",
