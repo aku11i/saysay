@@ -12,25 +12,7 @@ const chokidar = require("chokidar") as typeof import("chokidar");
 const chalk = require("chalk") as typeof import("chalk");
 const vite = require("vite") as typeof import("vite");
 
-const watchDirs = [
-  path.join(ROOT, "build", "main.cjs"),
-  path.join(ROOT, "build", "preload.cjs"),
-];
-
 (async () => {
-  let electronProcess: childProcess.ChildProcess | undefined;
-
-  const restartElectron = () => {
-    if (electronProcess && !electronProcess.killed) {
-      electronProcess.kill();
-      electronProcess = undefined;
-    }
-
-    electronProcess = childProcess.spawn("npm", ["start"], {
-      stdio: "inherit",
-    });
-  };
-
   await vite.build({
     configFile: path.join(ROOT, "vite.config.main.ts"),
     build: { watch: {}, sourcemap: "inline" },
@@ -51,7 +33,25 @@ const watchDirs = [
 
   await server.listen();
 
-  await new Promise((r) => setTimeout(r, 3000));
+  await new Promise((r) => setTimeout(r, 5000));
+
+  let electronProcess: childProcess.ChildProcess | undefined;
+
+  const restartElectron = () => {
+    if (electronProcess && !electronProcess.killed) {
+      electronProcess.kill();
+      electronProcess = undefined;
+    }
+
+    electronProcess = childProcess.spawn("npm", ["start"], {
+      stdio: "inherit",
+    });
+  };
+
+  const watchDirs = [
+    path.join(ROOT, "build", "main.cjs"),
+    path.join(ROOT, "build", "preload.cjs"),
+  ];
 
   chokidar.watch(watchDirs).on("all", (event, path) => {
     if (event !== "add" && event !== "change") return;
