@@ -15,5 +15,5 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["@types", "common", "main", "preload", "renderer"]
+  "include": ["@types", "common", "main", "preload", "renderer", "dev.ts"]
 }

@@ -3,9 +3,7 @@ import * as module from "module";
 import * as path from "path";
 import * as url from "url";
 
-// @ts-ignore
 const require = module.createRequire(import.meta.url);
-//@ts-ignore
 const ROOT = path.dirname(url.fileURLToPath(import.meta.url));
 
 const chokidar = require("chokidar") as typeof import("chokidar");
