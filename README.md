@@ -30,4 +30,5 @@ yarn build
 ```bash
 yarn build
 yarn dist
+# open ./dist
 ```
