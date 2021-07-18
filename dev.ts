@@ -14,16 +14,19 @@ const vite = require("vite") as typeof import("vite");
 
 (async () => {
   await vite.build({
+    mode: "development",
     configFile: path.join(ROOT, "vite.config.main.ts"),
     build: { watch: {}, sourcemap: "inline" },
   });
 
   await vite.build({
+    mode: "development",
     configFile: path.join(ROOT, "vite.config.preload.ts"),
     build: { watch: {}, sourcemap: "inline" },
   });
 
   const server = await vite.createServer({
+    mode: "development",
     configFile: path.join(ROOT, "vite.config.renderer.ts"),
     server: {
       port: 3000,

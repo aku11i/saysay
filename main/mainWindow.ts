@@ -1,11 +1,13 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
+import { APP_NAME, isDev } from "../common/env";
 import { preferences } from "../common/preferences";
 
 export const createMainWindow = async (): Promise<BrowserWindow> => {
   const { x, y, width, height } = preferences.store;
 
   const win = new BrowserWindow({
+    title: APP_NAME,
     x,
     y,
     width: width || 800,
@@ -25,13 +27,13 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     preferences.set("height", height);
   });
 
-  if (app.isPackaged) {
-    await win.loadFile(path.join(app.getAppPath(), "build", "index.html"));
-    win.show();
-  } else {
+  if (isDev) {
     await win.loadURL("http://localhost:3000");
     win.webContents.openDevTools();
     win.showInactive();
+  } else {
+    await win.loadFile(path.join(app.getAppPath(), "build", "index.html"));
+    win.show();
   }
 
   return win;
