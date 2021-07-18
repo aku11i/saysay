@@ -3,6 +3,4 @@ mac:
   identity: null
 asar: true
 files:
-  - "packages/main/dist"
-  - "packages/preload/dist"
-  - "packages/renderer/dist"
+  - "build"

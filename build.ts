@@ -11,14 +11,14 @@ const vite = require("vite") as typeof import("vite");
 
 (async () => {
   await vite.build({
-    configFile: path.join(ROOT, "packages", "main", "vite.config.ts"),
+    configFile: path.join(ROOT, "vite.config.main.ts"),
   });
 
   await vite.build({
-    configFile: path.join(ROOT, "packages", "preload", "vite.config.ts"),
+    configFile: path.join(ROOT, "vite.config.preload.ts"),
   });
 
   await vite.build({
-    configFile: path.join(ROOT, "packages", "renderer", "vite.config.ts"),
+    configFile: path.join(ROOT, "vite.config.renderer.ts"),
   });
 })();

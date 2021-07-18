@@ -4,14 +4,11 @@ import * as module from "module";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [],
-  root: __dirname,
-  base: __dirname + "/",
   build: {
-    outDir: "dist",
+    outDir: "build",
     target: "node14",
     lib: {
-      entry: "src/index",
-      name: "index",
+      entry: "main/main.ts",
       formats: ["cjs"],
     },
     rollupOptions: {
@@ -20,5 +17,6 @@ export default defineConfig({
         entryFileNames: "[name].cjs",
       },
     },
+    emptyOutDir: false,
   },
 });

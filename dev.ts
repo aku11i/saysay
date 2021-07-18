@@ -13,9 +13,8 @@ const chalk = require("chalk") as typeof import("chalk");
 const vite = require("vite") as typeof import("vite");
 
 const watchDirs = [
-  path.join(ROOT, "packages", "main", "dist"),
-  path.join(ROOT, "packages", "preload", "dist"),
-  path.join(ROOT, "packages", "common"),
+  path.join(ROOT, "build", "main.cjs"),
+  path.join(ROOT, "build", "preload.cjs"),
 ];
 
 (async () => {
@@ -33,17 +32,17 @@ const watchDirs = [
   };
 
   await vite.build({
-    configFile: path.join(ROOT, "packages", "main", "vite.config.ts"),
+    configFile: path.join(ROOT, "vite.config.main.ts"),
     build: { watch: {}, sourcemap: "inline" },
   });
 
   await vite.build({
-    configFile: path.join(ROOT, "packages", "preload", "vite.config.ts"),
+    configFile: path.join(ROOT, "vite.config.preload.ts"),
     build: { watch: {}, sourcemap: "inline" },
   });
 
   const server = await vite.createServer({
-    configFile: path.join(ROOT, "packages", "renderer", "vite.config.ts"),
+    configFile: path.join(ROOT, "vite.config.renderer.ts"),
     server: {
       port: 3000,
     },

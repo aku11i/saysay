@@ -7,6 +7,7 @@ export default defineConfig({
   root: __dirname,
   base: "",
   build: {
-    outDir: "dist",
+    outDir: "build",
+    emptyOutDir: false,
   },
 });

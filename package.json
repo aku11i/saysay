@@ -2,7 +2,7 @@
   "name": "saysay",
   "version": "0.0.1",
   "description": "",
-  "main": "packages/main/dist/index.cjs",
+  "main": "build/main.cjs",
   "type": "module",
   "scripts": {
     "start": "electron .",
@@ -10,9 +10,9 @@
     "build": "node --loader ts-node/esm/transpile-only build.ts",
     "dev": "node --loader ts-node/esm/transpile-only dev.ts",
     "prebuild": "yarn clean",
-    "predist": "npm-run-all clean build",
+    "predist": "yarn build && shx rm -rf dist",
     "dist": "electron-builder build",
-    "clean": "shx rm -rf dist",
+    "clean": "shx rm -rf build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
