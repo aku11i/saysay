@@ -1,38 +1,22 @@
 import * as childProcess from "child_process";
 import * as module from "module";
 import * as path from "path";
+import * as url from "url";
 
 // @ts-ignore
 const require = module.createRequire(import.meta.url);
+//@ts-ignore
+const ROOT = path.dirname(url.fileURLToPath(import.meta.url));
 
 const chokidar = require("chokidar") as typeof import("chokidar");
 const chalk = require("chalk") as typeof import("chalk");
 const vite = require("vite") as typeof import("vite");
-const esbuild = require("esbuild") as typeof import("esbuild");
 
-const workDir = process.cwd();
-
-const watchDirs = [path.join(workDir, "build", "main")];
-
-const esbuildOptions: import("esbuild").BuildOptions = {
-  entryPoints: ["src/main/index.ts", "src/main/preload.ts"],
-  outdir: "build/main",
-  bundle: true,
-  platform: "node",
-  target: "node14",
-  external: ["electron"],
-  format: "cjs",
-  watch: true,
-  sourcemap: "inline",
-  outExtension: { ".js": ".cjs" },
-};
-
-const viteConfig: import("vite").InlineConfig = {
-  configFile: path.join(workDir, "vite.config.ts"),
-  server: {
-    port: 3000,
-  },
-};
+const watchDirs = [
+  path.join(ROOT, "packages", "main", "dist"),
+  path.join(ROOT, "packages", "preload", "dist"),
+  path.join(ROOT, "packages", "common"),
+];
 
 (async () => {
   let electronProcess: childProcess.ChildProcess | undefined;
@@ -48,13 +32,30 @@ const viteConfig: import("vite").InlineConfig = {
     });
   };
 
-  const server = await vite.createServer(viteConfig);
+  await vite.build({
+    configFile: path.join(ROOT, "packages", "main", "vite.config.ts"),
+    build: { watch: {}, sourcemap: "inline" },
+  });
+
+  await vite.build({
+    configFile: path.join(ROOT, "packages", "preload", "vite.config.ts"),
+    build: { watch: {}, sourcemap: "inline" },
+  });
+
+  const server = await vite.createServer({
+    configFile: path.join(ROOT, "packages", "renderer", "vite.config.ts"),
+    server: {
+      port: 3000,
+    },
+    build: { sourcemap: "inline" },
+  });
 
   await server.listen();
 
-  await esbuild.build(esbuildOptions);
+  await new Promise((r) => setTimeout(r, 3000));
 
   chokidar.watch(watchDirs).on("all", (event, path) => {
+    if (event !== "add" && event !== "change") return;
     console.log(chalk.yellow(`[${event}] ${path}`));
     restartElectron();
   });

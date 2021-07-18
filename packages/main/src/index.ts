@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
-import { preferences } from "../common/preferences";
+import { preferences } from "../../common/preferences";
 
 const createWindow = async () => {
   const { x, y, width, height } = preferences.store;
@@ -11,7 +11,13 @@ const createWindow = async () => {
     width: width || 800,
     height: height || 600,
     webPreferences: {
-      preload: path.join(__dirname, "preload.cjs"),
+      preload: path.join(
+        app.getAppPath(),
+        "packages",
+        "preload",
+        "dist",
+        "index.cjs"
+      ),
     },
     show: false,
   });
@@ -27,7 +33,7 @@ const createWindow = async () => {
 
   if (app.isPackaged) {
     await mainWindow.loadFile(
-      path.join(app.getAppPath(), "build", "renderer", "index.html")
+      path.join(app.getAppPath(), "packages", "renderer", "dist", "index.html")
     );
     mainWindow.show();
   } else {
