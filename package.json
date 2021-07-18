@@ -20,8 +20,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "aktriver",
+  "license": "MIT",
   "dependencies": {
     "electron-store": "^8.0.0",
     "react": "^17.0.2",
