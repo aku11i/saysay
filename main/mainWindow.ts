@@ -27,7 +27,7 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     preferences.set("height", height);
   });
 
-  if (isDev) {
+  if (import.meta.env.MODE === "development") {
     await win.loadURL("http://localhost:3000");
     win.webContents.openDevTools();
     win.showInactive();
