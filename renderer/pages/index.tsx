@@ -22,6 +22,17 @@ export const Index: FunctionComponent = () => {
     await window.ipc.say({ message });
   };
 
+  const handleSave = async (history: History) => {
+    const { message } = history;
+    await window.ipc.save({ message });
+  };
+
+  const handleDelete = async (history: History) => {
+    setHistoryList((prev) =>
+      prev.filter((_) => _.timestamp !== history.timestamp)
+    );
+  };
+
   return (
     <Box width="100vw" height="100vh" paddingX="10%" paddingY="10%">
       <VStack>
@@ -35,7 +46,12 @@ export const Index: FunctionComponent = () => {
           {historyList.map((_, i) => (
             <Fragment key={_.timestamp}>
               {i !== 0 && <Divider />}
-              <HistoryItem history={_} onPlay={handlePlayHistory} />
+              <HistoryItem
+                history={_}
+                onPlay={handlePlayHistory}
+                onSave={handleSave}
+                onDelete={handleDelete}
+              />
             </Fragment>
           ))}
         </Box>

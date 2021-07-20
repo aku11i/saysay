@@ -1,5 +1,6 @@
 export enum IpcChannels {
   SAY = "SAY",
+  SAVE = "SAVE",
 }
 
 export type SayRequest = {
@@ -7,3 +8,9 @@ export type SayRequest = {
 };
 
 export type SayResponse = void;
+
+export type SaveRequest = {
+  message: string;
+};
+
+export type SaveResponse = string | void;
