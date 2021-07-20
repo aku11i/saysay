@@ -10,4 +10,7 @@ export default defineConfig({
     outDir: "build",
     emptyOutDir: false,
   },
+  esbuild: {
+    jsxInject: `import React from "react";`,
+  },
 });
