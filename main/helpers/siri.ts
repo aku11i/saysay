@@ -1,5 +1,6 @@
 import { execFile } from "child_process";
 import { BrowserWindow, dialog, shell } from "electron";
+import filenamify from "filenamify";
 import { promises as fs } from "fs";
 import * as path from "path";
 import { promisify } from "util";
@@ -30,7 +31,11 @@ export const save = async (
 ): Promise<string | void> => {
   await searchSayCommand();
 
-  const { canceled, filePath } = await dialog.showSaveDialog(win);
+  const defaultPath = filenamify(message, { replacement: "_" });
+
+  const { canceled, filePath } = await dialog.showSaveDialog(win, {
+    defaultPath,
+  });
   if (canceled || !filePath) return;
 
   await execFileAsync(SAY_COMMAND, [message, "-o", filePath]);
