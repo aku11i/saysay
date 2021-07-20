@@ -20,10 +20,6 @@ export const Index: FunctionComponent = () => {
 
   const handlePlayHistory = async (history: History) => {
     const { message } = history;
-    setHistoryList([
-      history,
-      ...historyList.filter((_) => _.timestamp !== history.timestamp),
-    ]);
     await window.ipc.say({ message });
   };
 
