@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
-import { APP_NAME, isDev } from "../common/env";
+
+import { APP_NAME } from "../common/env";
 import { preferences } from "../common/preferences";
 
 export const createMainWindow = async (): Promise<BrowserWindow> => {

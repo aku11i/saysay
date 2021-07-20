@@ -1,7 +1,8 @@
-import { FunctionComponent } from "react";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
-import theme from "./theme";
+import { FunctionComponent } from "react";
+
 import { Index } from "./pages";
+import theme from "./theme";
 
 export const App: FunctionComponent = () => (
   <>

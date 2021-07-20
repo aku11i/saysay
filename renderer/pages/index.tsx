@@ -1,8 +1,9 @@
 import { Box, Divider, VStack } from "@chakra-ui/react";
 import { Fragment, FunctionComponent, useState } from "react";
+
+import { History } from "../../@types/history";
 import { HistoryItem } from "../components/HistoryItem";
 import { MessageInput } from "../components/MessageInput";
-import { History } from "../../@types/history";
 
 export const Index: FunctionComponent = () => {
   const [historyList, setHistoryList] = useState<History[]>([]);

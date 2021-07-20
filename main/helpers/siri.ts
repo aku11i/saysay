@@ -1,7 +1,7 @@
 import { execFile } from "child_process";
 import { BrowserWindow, dialog, shell } from "electron";
-import { promisify } from "util";
 import * as path from "path";
+import { promisify } from "util";
 
 const execFileAsync = promisify(execFile);
 

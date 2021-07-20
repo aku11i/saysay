@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 import { FaEllipsisH, FaPlay } from "react-icons/fa";
+
 import { History } from "../../@types/history";
 
 export type HistoryItemProps = {

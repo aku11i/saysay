@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
+
 import {
   IpcChannels,
   SaveRequest,
@@ -6,7 +7,6 @@ import {
   SayRequest,
   SayResponse,
 } from "../common/ipcChannels";
-
 import { save, say } from "./helpers/siri";
 
 const handle = <Req, Res>(
@@ -16,7 +16,7 @@ const handle = <Req, Res>(
   ipcMain.handle(channel, callback);
 };
 
-export const registerIpcHandlers = () => {
+export const registerIpcHandlers = (): void => {
   handle<SayRequest, SayResponse>(IpcChannels.SAY, async (_event, req) => {
     await say(req.message);
   });
