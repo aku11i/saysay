@@ -35,7 +35,12 @@ export const Index: FunctionComponent = () => {
   };
 
   return (
-    <Box width="100vw" height="100vh" paddingX="10%" paddingY="10%">
+    <Box
+      width="100vw"
+      height="100vh"
+      paddingX={["5%", "10%", "15%", "20%"]}
+      paddingY="10%"
+    >
       <VStack>
         <Box width="80%">
           <MessageInput onPlay={handlePlay} />
