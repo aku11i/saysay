@@ -7,7 +7,7 @@ import theme from "./theme";
 export const App: FunctionComponent = () => (
   <>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Index />
     </ChakraProvider>
   </>
