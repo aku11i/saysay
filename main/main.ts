@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from "electron";
+
 import { registerIpcHandlers } from "./ipcHandler";
 import { createMainWindow } from "./mainWindow";
 

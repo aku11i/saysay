@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import * as childProcess from "child_process";
 import * as module from "module";
 import * as path from "path";
