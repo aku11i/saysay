@@ -1,24 +1,28 @@
 import { Box, Divider, VStack } from "@chakra-ui/react";
-import { Fragment, FunctionComponent, useState } from "react";
+import useLocalStorage from "@rehooks/local-storage";
+import { Fragment, FunctionComponent } from "react";
 
 import { History } from "../../@types/history";
 import { HistoryItem } from "../components/HistoryItem";
 import { MessageInput } from "../components/MessageInput";
 
 export const Index: FunctionComponent = () => {
-  const [historyList, setHistoryList] = useState<History[]>([]);
+  const [historyList, setHistoryList] = useLocalStorage<History[]>(
+    "historyList",
+    []
+  );
 
   const handlePlay = async (message: string) => {
     const newHistory: History = { message, timestamp: Date.now() };
-    setHistoryList((prev) => [newHistory, ...prev]);
+    setHistoryList([newHistory, ...historyList]);
     await window.ipc.say({ message });
   };
 
   const handlePlayHistory = async (history: History) => {
     const { message } = history;
-    setHistoryList((prev) => [
+    setHistoryList([
       history,
-      ...prev.filter((_) => _.timestamp !== history.timestamp),
+      ...historyList.filter((_) => _.timestamp !== history.timestamp),
     ]);
     await window.ipc.say({ message });
   };
@@ -29,8 +33,8 @@ export const Index: FunctionComponent = () => {
   };
 
   const handleDelete = async (history: History) => {
-    setHistoryList((prev) =>
-      prev.filter((_) => _.timestamp !== history.timestamp)
+    setHistoryList(
+      historyList.filter((_) => _.timestamp !== history.timestamp)
     );
   };
 
