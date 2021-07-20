@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
+import { BrowserWindow, dialog, ipcMain, IpcMainInvokeEvent } from "electron";
 
 import {
   IpcChannels,
@@ -13,7 +13,12 @@ const handle = <Req, Res>(
   channel: IpcChannels,
   callback: (event: IpcMainInvokeEvent, req: Req) => Promise<Res>
 ) => {
-  ipcMain.handle(channel, callback);
+  ipcMain.handle(channel, (event, req) =>
+    callback(event, req).catch((e) => {
+      dialog.showErrorBox("Error", e.message);
+      throw e;
+    })
+  );
 };
 
 export const registerIpcHandlers = (): void => {
