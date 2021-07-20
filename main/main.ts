@@ -1,7 +1,10 @@
 import { app, BrowserWindow } from "electron";
+import { registerIpcHandlers } from "./ipcHandler";
 import { createMainWindow } from "./mainWindow";
 
 (async () => {
+  registerIpcHandlers();
+
   await app.whenReady();
 
   app.on("activate", async () => {

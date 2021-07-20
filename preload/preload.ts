@@ -1,11 +1,13 @@
-import * as os from "os";
 import { contextBridge, ipcRenderer } from "electron";
+import { IpcChannels, SayRequest, SayResponse } from "../common/ipcChannels";
 
-console.log("preload", os.platform());
+type Ipc = {
+  say: (req: SayRequest) => Promise<SayResponse>;
+};
 
-type Ipc = {};
-
-const ipc: Ipc = {};
+const ipc: Ipc = {
+  say: (req) => ipcRenderer.invoke(IpcChannels.SAY, req),
+};
 
 contextBridge.exposeInMainWorld("ipc", ipc);
 
