@@ -17,7 +17,6 @@ export const MessageInput: FunctionComponent<MessageInputProps> = ({
   };
 
   const handleKeyPress = async (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key);
     if (e.key === "Enter") await handlePlay();
   };
 
