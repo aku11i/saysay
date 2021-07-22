@@ -5,6 +5,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  StackProps,
   Text,
 } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
@@ -12,25 +13,26 @@ import { FaEllipsisH, FaPlay } from "react-icons/fa";
 
 import { History } from "../../@types/history";
 
-export type HistoryItemProps = {
+export type HistoryItemProps = StackProps & {
   history: History;
-  onPlay: (history: History) => void;
-  onSave: (history: History) => void;
-  onDelete: (history: History) => void;
+  onPlayHistory: (history: History) => void;
+  onSaveHistory: (history: History) => void;
+  onDeleteHistory: (history: History) => void;
 };
 
 export const HistoryItem: FunctionComponent<HistoryItemProps> = ({
   history,
-  onPlay,
-  onSave,
-  onDelete,
+  onPlayHistory,
+  onSaveHistory,
+  onDeleteHistory,
+  ...props
 }) => {
   return (
-    <HStack paddingY="2">
+    <HStack paddingY="2" {...props}>
       <Text as="span" width="full">
         {history.message}
       </Text>
-      <Button variant="ghost" onClick={() => onPlay(history)}>
+      <Button variant="ghost" onClick={() => onPlayHistory(history)}>
         <FaPlay />
       </Button>
       <Menu>
@@ -39,8 +41,8 @@ export const HistoryItem: FunctionComponent<HistoryItemProps> = ({
         </MenuButton>
 
         <MenuList>
-          <MenuItem onClick={() => onSave(history)}>Save</MenuItem>
-          <MenuItem onClick={() => onDelete(history)}>Delete</MenuItem>
+          <MenuItem onClick={() => onSaveHistory(history)}>Save</MenuItem>
+          <MenuItem onClick={() => onDeleteHistory(history)}>Delete</MenuItem>
         </MenuList>
       </Menu>
     </HStack>
