@@ -122,9 +122,10 @@ export const Index: FunctionComponent = () => {
       width="100vw"
       height="100vh"
       paddingX={{ base: "5%", md: "10%", lg: "15%", xl: "20%" }}
-      paddingY="5%"
+      paddingTop="8"
+      paddingBottom="4"
     >
-      <VStack as="main">
+      <VStack height="full" as="main">
         <Box as="section" width="full">
           <VStack width="full">
             <Textarea
@@ -165,7 +166,7 @@ export const Index: FunctionComponent = () => {
 
         <Box as="section" height="8" />
 
-        <Box as="section" width="full">
+        <Box as="section" width="full" overflowY="scroll" paddingRight="4">
           {historyList.length > 0 ? (
             <Box as="ol" width="full">
               {historyList.map((_, i) => (
