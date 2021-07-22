@@ -7,6 +7,7 @@ import {
   MenuList,
   StackProps,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 import { FaEllipsisH, FaPlay } from "react-icons/fa";
@@ -29,9 +30,14 @@ export const HistoryItem: FunctionComponent<HistoryItemProps> = ({
 }) => {
   return (
     <HStack paddingY="2" {...props}>
-      <Text as="span" width="full">
-        {history.message}
-      </Text>
+      <VStack width="full">
+        <Text as="span" width="full">
+          {history.message}
+        </Text>
+        <Text color="gray.500" width="full" fontSize="xs">
+          {history.voiceName}
+        </Text>
+      </VStack>
       <Button variant="ghost" onClick={() => onPlayHistory(history)}>
         <FaPlay />
       </Button>
