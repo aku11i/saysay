@@ -1,34 +1,35 @@
-import { Button, HStack, Input } from "@chakra-ui/react";
+import { Button, HStack, Input, StackProps } from "@chakra-ui/react";
 import { FunctionComponent, KeyboardEvent, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 
-export type MessageInputProps = {
-  onPlay: (message: string) => Promise<void>;
+export type MessageInputProps = StackProps & {
+  onPlayMessage: (message: string) => Promise<void>;
 };
 
 export const MessageInput: FunctionComponent<MessageInputProps> = ({
-  onPlay,
+  onPlayMessage,
+  ...props
 }) => {
   const [message, setMessage] = useState("");
 
-  const handlePlay = async () => {
+  const handlePlayMessage = async () => {
     setMessage("");
-    await onPlay(message);
+    await onPlayMessage(message);
   };
 
   const handleKeyPress = async (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") await handlePlay();
+    if (e.key === "Enter") await handlePlayMessage();
   };
 
   return (
-    <HStack width="full">
+    <HStack width="full" {...props}>
       <Input
         value={message}
         onKeyPress={handleKeyPress}
         onChange={(e) => setMessage(e.target.value)}
         width="full"
       />
-      <Button variant="outline" onClick={handlePlay}>
+      <Button variant="outline" onClick={handlePlayMessage}>
         <FaPlay />
       </Button>
     </HStack>

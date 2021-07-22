@@ -12,7 +12,7 @@ export const Index: FunctionComponent = () => {
     []
   );
 
-  const handlePlay = async (message: string) => {
+  const handlePlayMessage = async (message: string) => {
     const newHistory: History = { message, timestamp: Date.now() };
     setHistoryList([newHistory, ...historyList]);
     await window.ipc.say({ message });
@@ -23,12 +23,12 @@ export const Index: FunctionComponent = () => {
     await window.ipc.say({ message });
   };
 
-  const handleSave = async (history: History) => {
+  const handleSaveHistory = async (history: History) => {
     const { message } = history;
     await window.ipc.save({ message });
   };
 
-  const handleDelete = async (history: History) => {
+  const handleDeleteHistory = async (history: History) => {
     setHistoryList(
       historyList.filter((_) => _.timestamp !== history.timestamp)
     );
@@ -41,25 +41,28 @@ export const Index: FunctionComponent = () => {
       paddingX={["5%", "10%", "15%", "20%"]}
       paddingY="10%"
     >
-      <VStack>
-        <Box width="80%">
-          <MessageInput onPlay={handlePlay} />
+      <VStack as="main">
+        <Box as="section" width="80%">
+          <MessageInput onPlayMessage={handlePlayMessage} />
         </Box>
 
-        <Box height="8" />
+        <Box as="section" height="8" />
 
-        <Box width="full">
-          {historyList.map((_, i) => (
-            <Fragment key={_.timestamp}>
-              {i !== 0 && <Divider />}
-              <HistoryItem
-                history={_}
-                onPlay={handlePlayHistory}
-                onSave={handleSave}
-                onDelete={handleDelete}
-              />
-            </Fragment>
-          ))}
+        <Box as="section" width="full">
+          <Box as="ol" width="full">
+            {historyList.map((_, i) => (
+              <Fragment key={_.timestamp}>
+                {i !== 0 && <Divider _light={{ borderColor: "gray.300" }} />}
+                <HistoryItem
+                  as="li"
+                  history={_}
+                  onPlayHistory={handlePlayHistory}
+                  onSaveHistory={handleSaveHistory}
+                  onDeleteHistory={handleDeleteHistory}
+                />
+              </Fragment>
+            ))}
+          </Box>
         </Box>
       </VStack>
     </Box>
