@@ -38,7 +38,7 @@ export const Index: FunctionComponent = () => {
     <Box
       width="100vw"
       height="100vh"
-      paddingX={["5%", "10%", "15%", "20%"]}
+      paddingX={{ base: "5%", md: "10%", lg: "15%", xl: "20%" }}
       paddingY="10%"
     >
       <VStack as="main">
