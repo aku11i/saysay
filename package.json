@@ -21,11 +21,22 @@
     "eslint": "eslint . --ignore-path .gitignore",
     "lint": "yarn eslint && yarn prettier --check",
     "fix": "yarn eslint --fix && yarn prettier --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "aktriver",
   "license": "MIT",
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css}": [
+      "prettier --write"
+    ],
+    "*.{js,cjs,json,yml,md}": "prettier --write"
+  },
   "dependencies": {
     "@chakra-ui/react": "^1.6.5",
     "@emotion/react": "^11",
@@ -54,6 +65,8 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
     "shx": "^0.3.3",
