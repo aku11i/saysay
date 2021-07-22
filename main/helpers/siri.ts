@@ -57,7 +57,7 @@ export const save = async ({
     message,
     "--voice",
     voice.name,
-    "-o",
+    "--out",
     filePath,
   ]);
   shell.openPath(path.dirname(filePath)).catch((e) => console.error(e));
