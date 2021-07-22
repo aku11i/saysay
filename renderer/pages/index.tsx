@@ -14,13 +14,18 @@ export const Index: FunctionComponent = () => {
     []
   );
 
-  const [voice, setVoice] = useLocalStorage<Voice>("voice");
+  const [voice, setVoice] = useLocalStorage<Voice | null>("voice");
 
   const voices = useAsyncMemo(() => window.ipc.getVoices(), []);
   useEffect(() => {
-    if (voice) return;
-    const first = voices?.[0];
-    if (first) setVoice(first);
+    if (!voices) return;
+
+    const savedVoice = voice && voices.find((_) => _.name === voice.name);
+    if (savedVoice) {
+      setVoice(savedVoice);
+    } else {
+      setVoice(voices[0] || null);
+    }
   }, [voices]);
 
   const handleVoiceChange = (voice: Voice) => {
