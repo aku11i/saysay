@@ -66,6 +66,7 @@ export const MessageInput: FunctionComponent<MessageInputProps> = ({
       />
       <HStack width="full">
         <VoiceSelect
+          title="Select a voice"
           value={voice?.name}
           voices={voices}
           onVoiceChange={onVoiceChange}
