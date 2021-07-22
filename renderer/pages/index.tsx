@@ -1,22 +1,44 @@
-import { Box, Divider, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  Spacer,
+  Textarea,
+  VStack,
+} from "@chakra-ui/react";
 import useLocalStorage from "@rehooks/local-storage";
-import { Fragment, FunctionComponent, useEffect } from "react";
+import {
+  ChangeEvent,
+  Fragment,
+  FunctionComponent,
+  KeyboardEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { FaPlay, FaSave } from "react-icons/fa";
 
 import { History } from "../../@types/history";
 import { Voice } from "../../@types/voice";
 import { HistoryItem } from "../components/HistoryItem";
-import { MessageInput } from "../components/MessageInput";
-import { useAsyncMemo } from "../hooks/useAsyncMemo";
+import { VoiceSelect } from "../components/VoiceSelect";
+import { useAsync } from "../hooks/useAsync";
+import { useIpc } from "../hooks/useIpc";
 
 export const Index: FunctionComponent = () => {
+  const ipc = useIpc();
+
+  const [message, setMessage] = useState("");
+  const isFilledMessage = useMemo(() => Boolean(message.trim()), [message]);
+
   const [historyList, setHistoryList] = useLocalStorage<History[]>(
     "historyList",
     []
   );
 
   const [voice, setVoice] = useLocalStorage<Voice | null>("voice");
-
-  const voices = useAsyncMemo(() => window.ipc.getVoices(), []);
+  const voices = useAsync(() => ipc.getVoices());
   useEffect(() => {
     if (!voices) return;
 
@@ -28,12 +50,28 @@ export const Index: FunctionComponent = () => {
     }
   }, [voices]);
 
-  const handleVoiceChange = (voice: Voice) => {
+  const handleVoiceChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const voice = voices?.find((_) => _.name === e.target.value);
+    if (!voice) return;
+
     setVoice(voice);
   };
 
-  const handlePlayMessage = async (message: string) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.shiftKey && e.key === "Enter") {
+      e.preventDefault();
+      handlePlayMessage();
+    }
+
+    if (e.altKey && e.key === "Enter" && isFilledMessage) {
+      e.preventDefault();
+      handleSaveMessage();
+    }
+  };
+
+  const handlePlayMessage = async () => {
     if (!voice) return;
+    setMessage("");
 
     const newHistory: History = {
       message,
@@ -42,16 +80,16 @@ export const Index: FunctionComponent = () => {
     };
     if (message) {
       setHistoryList([newHistory, ...historyList]);
-      await window.ipc.say({ message, voice });
+      await ipc.say({ message, voice });
     } else {
-      await window.ipc.say({ message: voice.description, voice });
+      await ipc.say({ message: voice.description, voice });
     }
   };
 
-  const handleSaveMessage = async (message: string) => {
+  const handleSaveMessage = async () => {
     if (!voice) return;
 
-    await window.ipc.save({
+    await ipc.save({
       message,
       voice,
     });
@@ -63,14 +101,14 @@ export const Index: FunctionComponent = () => {
     const voice = voices?.find((_) => _.name === voiceName);
     if (!voice) return;
 
-    await window.ipc.say({ message, voice });
+    await ipc.say({ message, voice });
   };
 
   const handleSaveHistory = async (history: History) => {
     if (!voice) return;
 
     const { message } = history;
-    await window.ipc.save({ message, voice });
+    await ipc.save({ message, voice });
   };
 
   const handleDeleteHistory = async (history: History) => {
@@ -88,13 +126,41 @@ export const Index: FunctionComponent = () => {
     >
       <VStack as="main">
         <Box as="section" width="full">
-          <MessageInput
-            onPlayMessage={handlePlayMessage}
-            onSaveMessage={handleSaveMessage}
-            onVoiceChange={handleVoiceChange}
-            voices={voices || []}
-            voice={voice || undefined}
-          />
+          <VStack width="full">
+            <Textarea
+              placeholder={voice?.description}
+              value={message}
+              onKeyPress={handleKeyPress}
+              onChange={(e) => setMessage(e.target.value)}
+              width="full"
+              resize="vertical"
+              minHeight="32"
+            />
+            <HStack width="full">
+              <VoiceSelect
+                title="Select a voice"
+                value={voice?.name}
+                voices={voices || []}
+                onChange={handleVoiceChange}
+              />
+              <Spacer />
+              <Button
+                variant="outline"
+                onClick={handleSaveMessage}
+                disabled={!isFilledMessage}
+                title="Save (Alt + Enter)"
+              >
+                <FaSave />
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handlePlayMessage}
+                title="Play (Shift + Enter)"
+              >
+                <FaPlay />
+              </Button>
+            </HStack>
+          </VStack>
         </Box>
 
         <Box as="section" height="8" />
