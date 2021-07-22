@@ -1,13 +1,15 @@
 import { BrowserWindow, dialog, ipcMain, IpcMainInvokeEvent } from "electron";
 
 import {
+  GetVoicesRequest,
+  GetVoicesResponse,
   IpcChannels,
   SaveRequest,
   SaveResponse,
   SayRequest,
   SayResponse,
 } from "../common/ipcChannels";
-import { save, say } from "./helpers/siri";
+import { getVoices, save, say } from "./helpers/siri";
 
 const handle = <Req, Res>(
   channel: IpcChannels,
@@ -23,16 +25,25 @@ const handle = <Req, Res>(
 
 export const registerIpcHandlers = (): void => {
   handle<SayRequest, SayResponse>(IpcChannels.SAY, async (_event, req) => {
-    await say(req.message);
+    const { message, voice } = req;
+    await say({ message, voice });
   });
 
   handle<SaveRequest, SaveResponse>(IpcChannels.SAVE, async (event, req) => {
     const win = BrowserWindow.fromWebContents(event.sender);
+    const { message, voice } = req;
 
     if (!win) {
       throw new Error("BrowserWindow was not found.");
     }
 
-    await save(req.message, win);
+    await save({ message, voice, win });
   });
+
+  handle<GetVoicesRequest, GetVoicesResponse>(
+    IpcChannels.GET_VOICES,
+    async () => {
+      return await getVoices();
+    }
+  );
 };
