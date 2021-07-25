@@ -1,25 +1,9 @@
-import { Voice } from "../@types/voice";
-
 export enum IpcChannels {
-  SAY = "SAY",
-  SAVE = "SAVE",
-  GET_VOICES = "GET_VOICES",
+  ECHO = "ECHO", // An example of IPC channel
 }
 
-export type SayRequest = {
+export type EchoRequest = {
   message: string;
-  voice: Voice;
 };
 
-export type SayResponse = void;
-
-export type SaveRequest = {
-  message: string;
-  voice: Voice;
-};
-
-export type SaveResponse = string | void;
-
-export type GetVoicesRequest = void;
-
-export type GetVoicesResponse = Voice[];
+export type EchoResponse = void;

@@ -13,48 +13,31 @@ import {
   Fragment,
   FunctionComponent,
   KeyboardEvent,
-  useEffect,
   useMemo,
   useState,
 } from "react";
-import { FaPlay, FaSave } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 
 import { History } from "../../@types/history";
-import { Voice } from "../../@types/voice";
 import { HistoryItem } from "../components/HistoryItem";
 import { VoiceSelect } from "../components/VoiceSelect";
-import { useAsync } from "../hooks/useAsync";
-import { useIpc } from "../hooks/useIpc";
+import { useSpeechSynthesis } from "../hooks/useSpeechSysnthesis";
 
 export const Index: FunctionComponent = () => {
-  const ipc = useIpc();
+  const { defaultVoice, voices, speak } = useSpeechSynthesis();
 
-  const [message, setMessage] = useState("");
-  const isFilledMessage = useMemo(() => Boolean(message.trim()), [message]);
+  const [text, setText] = useState("");
+  const isTextEmpty = useMemo(() => text.trim().length === 0, [text]);
 
   const [historyList, setHistoryList] = useLocalStorage<History[]>(
     "historyList",
     []
   );
 
-  const [voice, setVoice] = useLocalStorage<Voice | null>("voice");
-  const voices = useAsync(() => ipc.getVoices());
-  useEffect(() => {
-    if (!voices) return;
-
-    const savedVoice = voice && voices.find((_) => _.name === voice.name);
-    if (savedVoice) {
-      setVoice(savedVoice);
-    } else {
-      setVoice(voices[0] || null);
-    }
-  }, [voices]);
+  const [voiceURI, setVoiceURI] = useLocalStorage<string | null>("voiceURI");
 
   const handleVoiceChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const voice = voices?.find((_) => _.name === e.target.value);
-    if (!voice) return;
-
-    setVoice(voice);
+    setVoiceURI(e.target.value);
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -62,53 +45,30 @@ export const Index: FunctionComponent = () => {
       e.preventDefault();
       handlePlayMessage();
     }
-
-    if (e.altKey && e.key === "Enter" && isFilledMessage) {
-      e.preventDefault();
-      handleSaveMessage();
-    }
   };
 
   const handlePlayMessage = async () => {
-    if (!voice) return;
-    setMessage("");
-
     const newHistory: History = {
-      message,
+      text: text,
       timestamp: Date.now(),
-      voiceName: voice.name,
+      voiceURI: voiceURI ?? defaultVoice?.voiceURI,
     };
-    if (message) {
+
+    const isRepeated =
+      historyList.length &&
+      historyList[0].voiceURI === newHistory.voiceURI &&
+      historyList[0].text === newHistory.text;
+
+    if (!isRepeated) {
       setHistoryList([newHistory, ...historyList]);
-      await ipc.say({ message, voice });
-    } else {
-      await ipc.say({ message: voice.description, voice });
     }
-  };
 
-  const handleSaveMessage = async () => {
-    if (!voice) return;
-
-    await ipc.save({
-      message,
-      voice,
-    });
+    await speak({ text, voiceURI: voiceURI ?? defaultVoice?.voiceURI });
   };
 
   const handlePlayHistory = async (history: History) => {
-    const { message, voiceName: voiceName } = history;
-
-    const voice = voices?.find((_) => _.name === voiceName);
-    if (!voice) return;
-
-    await ipc.say({ message, voice });
-  };
-
-  const handleSaveHistory = async (history: History) => {
-    if (!voice) return;
-
-    const { message } = history;
-    await ipc.save({ message, voice });
+    const { text, voiceURI } = history;
+    await speak({ text, voiceURI });
   };
 
   const handleDeleteHistory = async (history: History) => {
@@ -129,10 +89,10 @@ export const Index: FunctionComponent = () => {
         <Box as="section" width="full">
           <VStack width="full">
             <Textarea
-              placeholder={voice?.description}
-              value={message}
+              placeholder="Hello!"
+              value={text}
               onKeyPress={handleKeyPress}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => setText(e.target.value)}
               width="full"
               resize="vertical"
               minHeight="32"
@@ -140,23 +100,16 @@ export const Index: FunctionComponent = () => {
             <HStack width="full">
               <VoiceSelect
                 title="Select a voice"
-                value={voice?.name}
-                voices={voices || []}
+                value={voiceURI || defaultVoice?.voiceURI}
+                voices={voices}
                 onChange={handleVoiceChange}
               />
               <Spacer />
               <Button
                 variant="outline"
-                onClick={handleSaveMessage}
-                disabled={!isFilledMessage}
-                title="Save (Alt + Enter)"
-              >
-                <FaSave />
-              </Button>
-              <Button
-                variant="outline"
                 onClick={handlePlayMessage}
                 title="Play (Shift + Enter)"
+                disabled={isTextEmpty}
               >
                 <FaPlay />
               </Button>
@@ -176,7 +129,6 @@ export const Index: FunctionComponent = () => {
                     as="li"
                     history={_}
                     onPlayHistory={handlePlayHistory}
-                    onSaveHistory={handleSaveHistory}
                     onDeleteHistory={handleDeleteHistory}
                   />
                 </Fragment>
