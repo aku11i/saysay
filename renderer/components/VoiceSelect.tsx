@@ -1,10 +1,8 @@
 import { Select, SelectProps } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 
-import { Voice } from "../../@types/voice";
-
 export type VoiceSelectProps = SelectProps & {
-  voices: Voice[];
+  voices: SpeechSynthesisVoice[];
 };
 
 export const VoiceSelect: FunctionComponent<VoiceSelectProps> = ({
@@ -13,7 +11,10 @@ export const VoiceSelect: FunctionComponent<VoiceSelectProps> = ({
 }) => (
   <Select {...props}>
     {voices.map((_) => (
-      <option key={_.name} value={_.name}>{`${_.name} (${_.locale})`}</option>
+      <option
+        key={_.voiceURI}
+        value={_.voiceURI}
+      >{`${_.name} (${_.lang})`}</option>
     ))}
   </Select>
 );

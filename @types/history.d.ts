@@ -1,5 +1,5 @@
 export type History = {
-  message: string;
-  voiceName: string;
+  text: string;
+  voiceURI?: string;
   timestamp: number;
 };
