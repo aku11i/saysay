@@ -3,6 +3,8 @@ import {
   Button,
   Divider,
   HStack,
+  List,
+  ListItem,
   Spacer,
   Textarea,
   VStack,
@@ -10,7 +12,6 @@ import {
 import useLocalStorage from "@rehooks/local-storage";
 import {
   ChangeEvent,
-  Fragment,
   FunctionComponent,
   KeyboardEvent,
   useMemo,
@@ -121,19 +122,19 @@ export const Index: FunctionComponent = () => {
 
         <Box as="section" width="full" overflowY="scroll" paddingRight="4">
           {historyList.length > 0 ? (
-            <Box as="ol" width="full">
+            <List width="full">
               {historyList.map((_, i) => (
-                <Fragment key={_.timestamp}>
+                <ListItem key={_.timestamp}>
                   {i !== 0 && <Divider _light={{ borderColor: "gray.300" }} />}
                   <HistoryItem
-                    as="li"
+                    width="full"
                     history={_}
                     onPlayHistory={handlePlayHistory}
                     onDeleteHistory={handleDeleteHistory}
                   />
-                </Fragment>
+                </ListItem>
               ))}
-            </Box>
+            </List>
           ) : (
             <></>
           )}
