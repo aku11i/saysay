@@ -41,7 +41,7 @@
     "@chakra-ui/react": "^1.6.5",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@rehooks/local-storage": "2.4.0",
+    "@rehooks/local-storage": "2.4.1",
     "electron-store": "^8.0.0",
     "filenamify": "^4.3.0",
     "framer-motion": "^4",
