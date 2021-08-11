@@ -5,7 +5,7 @@ Saysay is a template project of Electron which uses vite as transpiler.
 ## Setup
 
 ```bash
-yarn install --frozen-lockfile
+yarn install
 ```
 
 ## Dev
