@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [],
   build: {
     outDir: "build",
-    target: "chrome91",
+    target: "chrome94",
     lib: {
       entry: "preload/preload.ts",
       formats: ["cjs"],
