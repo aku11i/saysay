@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [],
   build: {
     outDir: "build",
-    target: "node14",
+    target: "node16",
     lib: {
       entry: "main/main.ts",
       formats: ["cjs"],
