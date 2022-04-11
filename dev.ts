@@ -4,12 +4,9 @@ import * as childProcess from "child_process";
 import * as module from "module";
 import * as path from "path";
 import * as url from "url";
-
-const require = module.createRequire(import.meta.url);
-
-const chokidar = require("chokidar") as typeof import("chokidar");
-const chalk = require("chalk") as typeof import("chalk");
-const vite = require("vite") as typeof import("vite");
+import * as chokidar from "chokidar";
+import chalk from "chalk";
+import * as vite from "vite";
 
 const ROOT = path.dirname(url.fileURLToPath(import.meta.url));
 
